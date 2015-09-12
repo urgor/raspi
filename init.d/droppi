@@ -1,0 +1,30 @@
+### BEGIN INIT INFO
+# Provides:          droppi
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Start DropPi script
+# Description:
+### END INIT INFO
+
+# Some things that run always
+# touch /var/lock/drop
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Starting drop"
+    python3 /home/pi/scripts/drop.py
+    ;;
+  stop)
+    echo "Stopping script drop"
+    echo "No action for stopping"
+    ;;
+  *)
+    echo "Usage: /etc/init.d/drop {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0

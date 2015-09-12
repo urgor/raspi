@@ -1,0 +1,40 @@
+begin
+	prog = myprogram
+	button = KEY_OK
+	config = KEY_OK
+end
+begin
+	prog = myprogram
+	button = KEY_UP
+	config = KEY_UP
+end
+begin
+	prog = myprogram
+	button = KEY_DOWN
+	config = KEY_DOWN
+end
+begin
+	prog = myprogram
+	button = KEY_LEFT
+	config = KEY_LEFT
+end
+begin
+	prog = myprogram
+	button = KEY_RIGHT
+	config = KEY_RIGHT
+end
+begin
+	prog = myprogram
+	button = KEY_A
+	config = KEY_A
+end
+begin
+	prog = myprogram
+	button = KEY_B
+	config = KEY_B
+end
+begin
+	prog = myprogram
+	button = KEY_0
+	config = KEY_0
+end
