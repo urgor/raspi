@@ -93,3 +93,28 @@ class LedCommand():
             self.led.on()
         self.state = not self.state
         return self
+
+class CaterpilarChasisCommand():
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def stop(self):
+        self.left.stop()
+        self.right.stop()
+
+    def forward(self):
+        self.right.forward()
+        self.left.forward()
+
+    def backward(self):
+        self.left.backward()
+        self.right.backward()
+
+    def rotateRight(self):
+        self.left.forward()
+        self.right.backward()
+
+    def rotateLeft(self):
+        self.left.backward()
+        self.right.forward()

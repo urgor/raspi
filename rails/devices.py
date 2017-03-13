@@ -55,6 +55,7 @@ class Led():
 
         GPIO.setmode( GPIO.BCM )
         GPIO.setup( pin, GPIO.OUT )
+        self.off()
 
     def on(self):
         GPIO.output(self.pin, False)
@@ -110,9 +111,29 @@ class StepMotor():
             if (self.stepCounter >= self.stepCount):
                 self.stepCounter = 0
             if (self.stepCounter < 0):
-                self.stepCounter += direction
+                # self.stepCounter = self.stepCount + direction
+                self.stepCounter = self.stepCounter + self.stepCount
 
             # Wait before moving on
             time.sleep(waitTime)
             for pin in range(0,4):
                 GPIO.output(self.pins[pin], False)
+
+class DcL9110:
+    def __init__(self, pins):
+        self.pins = pins
+        GPIO.setmode( GPIO.BCM )
+        for pin in self.pins:
+            GPIO.setup(pin,GPIO.OUT)
+
+    def forward(self):
+        GPIO.output(self.pins[0], False)
+        GPIO.output(self.pins[1], True)
+
+    def backward(self):
+        GPIO.output(self.pins[1], False)
+        GPIO.output(self.pins[0], True)
+
+    def stop (self):
+        GPIO.output(self.pins[0], False)
+        GPIO.output(self.pins[1], False)
