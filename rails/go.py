@@ -5,6 +5,10 @@ import random
 
 import RPi.GPIO as GPIO
 
+# python3-pigpio/stable 1.60-1 all
+#   Python module which talks to the pigpio daemon (Python 3)
+
+
 
 mr = dev.DcL9110([22,27])
 ml = dev.DcL9110([24,23])
