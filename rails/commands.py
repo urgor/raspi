@@ -137,3 +137,23 @@ class ServoCommand:
         
     def decrement(self, value = 1):
         self.motor.go(self.motor.getCurrent() - value)
+        
+class CameraCommand:
+    PICTURE_RESOLUTION_MAX = (3280, 2464)
+    VIDEO_RESOLUTION_720 = (1280, 720)
+    
+    def __init__(self, camera, filename):
+        self.camera = camera
+        self.i = 0
+        self.filename = filename
+        
+    def setResolution(self, resolution):
+        self.camera.resolution = resolution
+        
+    def doSnapshot(self):
+        self.camera.capture(self.filename.format(self.i))
+        self.i += 1
+        
+#camera.start_recording('video', 'mjpeg')
+#time.sleep(10)
+#camera.stop_recording()

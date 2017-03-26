@@ -4,14 +4,21 @@ import time
 import random
 import sys
 import RPi.GPIO as GPIO
+import picamera
 
 # python3-pigpio/stable 1.60-1 all
 #   Python module which talks to the pigpio daemon (Python 3)
 
+cam = picamera.PiCamera()
+camCmd = cmd.CameraCommand(cam, 'image{:0>6}.jpg')
+camCmd.setResolution(cmd.CameraCommand.VIDEO_RESOLUTION_720)
+for _ in range(0,100):
+    print('.')
+    camCmd.doSnapshot()
 
-mr = dev.CollectorMotor([20, 21])
-ml = dev.CollectorMotor([26, 19])
-chasis = cmd.CaterpilarChasisCommand(ml, mr)
+#mr = dev.CollectorMotor([20, 21])
+#ml = dev.CollectorMotor([26, 19])
+#chasis = cmd.CaterpilarChasisCommand(ml, mr)
 
 #import curses
 #stdscr = curses.initscr()
@@ -39,11 +46,11 @@ chasis = cmd.CaterpilarChasisCommand(ml, mr)
 #exit()
 
 
-for _ in range(0,500):
-    chasis.forward()
-    time.sleep(0.009)
-    chasis.stop()
-    time.sleep(0.1)
+#for _ in range(0,500):
+#    chasis.forward()
+#    time.sleep(0.009)
+#    chasis.stop()
+#    time.sleep(0.1)
 
 # button = dev.Button(17)
 # buzzer = dev.Buzzer(7)
