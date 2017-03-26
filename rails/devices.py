@@ -1,7 +1,7 @@
-
 import RPi.GPIO as GPIO
 import time
-import sys
+#import sys
+#import wiringpi
 
 GPIO.setwarnings(False)
 
@@ -119,7 +119,8 @@ class StepMotor():
             for pin in range(0,4):
                 GPIO.output(self.pins[pin], False)
 
-class DcL9110:
+class CollectorMotor:
+    """ DC collector motor on DcL9110 controller """
     def __init__(self, pins):
         self.pins = pins
         GPIO.setmode( GPIO.BCM )
@@ -137,3 +138,34 @@ class DcL9110:
     def stop (self):
         GPIO.output(self.pins[0], False)
         GPIO.output(self.pins[1], False)
+        
+class Servo:
+    def __init__(self, pin):
+        self.pin = pin
+        # use 'GPIO naming'
+        wiringpi.wiringPiSetupGpio()
+        # set #pin to be a PWM output
+        wiringpi.pinMode(self.pin, wiringpi.GPIO.PWM_OUTPUT)
+        # set the PWM mode to milliseconds stype
+        wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
+
+    def go(self, value):
+        self.current = value
+        wiringpi.pwmWrite(self.pin, self.current)
+        
+    def getMin(self):
+        return self.extremum[0]    
+
+    def getMax(self):
+        return self.extremum[1]
+    
+    def getCurrent(self):
+        return self.current
+        
+class ServoMG996R(Servo):
+    def __init__(self):
+        self.extremum = [60, 260]
+        super().__init__(18)
+        # divide down clock
+        wiringpi.pwmSetClock(192)
+        wiringpi.pwmSetRange(2000)

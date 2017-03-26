@@ -2,26 +2,48 @@ import devices as dev
 import commands as cmd
 import time
 import random
-
+import sys
 import RPi.GPIO as GPIO
 
 # python3-pigpio/stable 1.60-1 all
 #   Python module which talks to the pigpio daemon (Python 3)
 
 
-
-mr = dev.DcL9110([22,27])
-ml = dev.DcL9110([24,23])
+mr = dev.CollectorMotor([20, 21])
+ml = dev.CollectorMotor([26, 19])
 chasis = cmd.CaterpilarChasisCommand(ml, mr)
-chasis.forward()
-time.sleep(3)
-chasis.rotateRight()
-time.sleep(3)
-chasis.backward()
-time.sleep(3)
-chasis.rotateLeft()
-time.sleep(3)
-chasis.stop()
+
+#import curses
+#stdscr = curses.initscr()
+#curses.cbreak()
+#print "press q to quit"
+#quit=False
+#while quit !=True:
+#    c = stdscr.getch()
+#    print curses.keyname(c),
+#    ch = curses.keyname(c)
+#    if ch == "q" :
+#       quit=True
+#    elif ch == 'd':
+#        chasis.rotateRight()
+#    elif ch == 'a':
+#        chasis.rotateLeft()
+#    elif ch == 'w':
+#        chasis.forward()
+#    elif ch == 's':
+#        chasis.backward()
+#    elif ch == ' ':
+#        chasis.stop()
+#curses.endwin()
+#chasis.stop()
+#exit()
+
+
+for _ in range(0,500):
+    chasis.forward()
+    time.sleep(0.009)
+    chasis.stop()
+    time.sleep(0.1)
 
 # button = dev.Button(17)
 # buzzer = dev.Buzzer(7)

@@ -118,3 +118,22 @@ class CaterpilarChasisCommand():
     def rotateLeft(self):
         self.left.backward()
         self.right.forward()
+        
+class ServoCommand:
+    def __init__(self, motor):
+        self.motor = motor
+    
+    def goMin(self):
+        self.motor.go(self.motor.extremum[0])
+        
+    def goMax(self):
+        self.motor.go(self.motor.extremum[1])
+        
+    def goMiddle(self):
+        self.motor.go(int(round((self.motor.getMin() + self.motor.getMax()) / 2)))
+        
+    def increment(self, value = 1):
+        self.motor.go(self.motor.getCurrent() + value)
+        
+    def decrement(self, value = 1):
+        self.motor.go(self.motor.getCurrent() - value)
