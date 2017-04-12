@@ -1,5 +1,8 @@
 import time
 
+from devices import CollectorMotor
+
+
 class MotorCommandInterface():
     CLOCKWISE = 1
     CROSSCLOCKWISE = -1
@@ -95,17 +98,23 @@ class LedCommand():
         return self
 
 class CaterpilarChasisCommand():
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
+    def __init__(self, motor_left, motor_right):
+
+        assert isinstance(motor_left, CollectorMotor)
+        assert isinstance(motor_right, CollectorMotor)
+        self.left = motor_left
+        self.right = motor_right
+        self.delayLeft = None
+        self.delayRight = None
+        self.strategyStop = CaterpilarStrategyStop(motor_left, motor_right)
 
     def stop(self):
         self.left.stop()
         self.right.stop()
 
     def forward(self):
-        self.right.forward()
         self.left.forward()
+        self.right.forward()
 
     def backward(self):
         self.left.backward()
@@ -118,7 +127,60 @@ class CaterpilarChasisCommand():
     def rotateLeft(self):
         self.left.backward()
         self.right.forward()
-        
+
+    def initStep(self, delay_left, delay_right):
+        """
+        Define pulse length (work time of each caterpilar)
+        Then you may invoke doStep()
+        """
+        if delay_left > delay_right:
+            self.strategyStop = CaterpilarStrategyStopRight(self.left, self.right)
+        elif delay_left < delay_right:
+            self.strategyStop = CaterpilarStrategyStopLeft(self.left, self.right)
+        else:
+            self.strategyStop = CaterpilarStrategyStopTogether(self.left, self.right)
+        self.delayLeft = delay_left
+        self.delayRight = delay_right
+
+    def doStep(self):
+        """
+        Make step using previously initialized data by initStep()
+        """
+        self.left.forward()
+        self.right.forward()
+        self.strategyStop.stop(self.delayLeft, self.delayRight)
+
+class CaterpilarStrategyStop:
+    def __init__(self, motor_left, motor_right):
+        assert isinstance(motor_left, CollectorMotor)
+        assert isinstance(motor_right, CollectorMotor)
+        self.left = motor_left
+        self.right = motor_right
+
+    def stop(self, delay_left, delay_right):
+        raise Exception('This class should be not instanced or use Caterpilar.initStep() first')
+
+class CaterpilarStrategyStopLeft(CaterpilarStrategyStop):
+    def stop(self, delay_left, delay_right):
+        time.sleep(delay_left)
+        self.left.stop()
+        time.sleep(delay_right - delay_left)
+        self.right.stop()
+
+class CaterpilarStrategyStopRight(CaterpilarStrategyStop):
+    def stop(self, delay_left, delay_right):
+        time.sleep(delay_right)
+        self.right.stop()
+        time.sleep(delay_left - delay_right)
+        self.left.stop()
+
+class CaterpilarStrategyStopTogether(CaterpilarStrategyStop):
+    def stop(self, delay_left, delay_right):
+        time.sleep(delay_right)
+        self.right.stop()
+        self.left.stop()
+
+
 class ServoCommand:
     def __init__(self, motor):
         self.motor = motor
