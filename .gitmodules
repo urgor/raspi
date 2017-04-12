@@ -1,0 +1,3 @@
+[submodule "rails/libtft144"]
+	path = rails/libtft144
+	url = https://github.com/BLavery/LIBtft144.git
