@@ -99,7 +99,7 @@ class StepMotor():
 
     def go(self, direction, steps, waitTime = 0):
         if 0 == waitTime: waitTime = self.MINIMUM_DELAY
-        for _ in xrange(1, steps):
+        for _ in range(1, steps):
 
             for pin in range(0,4):
                 GPIO.output(self.pins[pin], self.seq[self.stepCounter][pin])

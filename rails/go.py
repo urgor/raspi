@@ -4,38 +4,26 @@ import time
 import random
 import sys
 import RPi.GPIO as GPIO
-import picamera
-
-# python3-pigpio/stable 1.60-1 all
-#   Python module which talks to the pigpio daemon (Python 3)
-
-# cam = picamera.PiCamera()
-# camCmd = cmd.CameraCommand(cam, 'image{:0>6}.jpg')
-# camCmd.setResolution(cmd.CameraCommand.VIDEO_RESOLUTION_720)
-#for _ in range(0,100):
-#    print('.')
-# cam.vflip = True
-# cam.hflip = True
-# camCmd.doSnapshot()
 
 
-mr = dev.CollectorMotor([20, 21])
-ml = dev.CollectorMotor([26, 19])
-chasis = cmd.CaterpilarChasisCommand(ml, mr)
-# chasis.initStep(.044, .03)
-# chasis.initStep(.015, .01)
 
-try:
-    for i in range(0,400):
-        print(i)
-        chasis.doStep()
-        time.sleep(.1)
-
-except: # (KeyboardInterrupt, SystemExit):
-    print()
-    print('Stopping chasis normaly')
-    chasis.stop()
-    raise
+# mr = dev.CollectorMotor([20, 21])
+# ml = dev.CollectorMotor([26, 19])
+# chasis = cmd.CaterpilarChasisCommand(ml, mr)
+# # chasis.initStep(.044, .03)
+# # chasis.initStep(.015, .01)
+#
+# try:
+#     for i in range(0,400):
+#         print(i)
+#         chasis.doStep()
+#         time.sleep(.1)
+#
+# except: # (KeyboardInterrupt, SystemExit):
+#     print()
+#     print('Stopping chasis normaly')
+#     chasis.stop()
+#     raise
 
 #import curses
 #stdscr = curses.initscr()

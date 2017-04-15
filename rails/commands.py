@@ -4,8 +4,8 @@ from devices import CollectorMotor
 
 
 class MotorCommandInterface():
-    CLOCKWISE = 1
-    CROSSCLOCKWISE = -1
+    CW = 1
+    CCW = -1
 
     def setDirection(self):
         raise Exception
@@ -21,7 +21,7 @@ class StepMotorCommand(MotorCommandInterface):
         if 'StepMotor' !=  motor.__class__.__name__:
             raise Exception
         self.motor = motor
-        self.directrion = MotorCommandInterface.CLOCKWISE
+        self.directrion = MotorCommandInterface.CW
         self.angle = 0
         self.time = 0
         self.rememberedSteps = 0
@@ -68,7 +68,7 @@ class StepMotorCommand(MotorCommandInterface):
         # time.sleep(self.motor.MINIMUM_DELAY)
 
         self.motor.go(
-            self.CLOCKWISE if self.rememberedSteps < 0 else self.CROSSCLOCKWISE,
+            self.CW if self.rememberedSteps < 0 else self.CCW,
             abs(self.rememberedSteps))
 
         self.rememberedSteps = 0;
@@ -202,6 +202,7 @@ class ServoCommand:
         
 class CameraCommand:
     PICTURE_RESOLUTION_MAX = (3280, 2464)
+    PICTURE_RESOLUTION_TFT144 = (128, 128)
     VIDEO_RESOLUTION_720 = (1280, 720)
     
     def __init__(self, camera, filename):
