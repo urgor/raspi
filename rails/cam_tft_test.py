@@ -16,10 +16,10 @@ cam.resolution = (128,128)
 cam.iso = 800
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
-RST = 18  # RST may use direct +3V strapping, and then be listed as 0 here. (Soft Reset used instead)
+RST = 25  # RST may use direct +3V strapping, and then be listed as 0 here. (Soft Reset used instead)
 CE = 0  # RPI GPIO: 0 or 1 for CE0 / CE1 number (NOT the pin#)
-DC = 22  # Labeled on board as "A0"   Command/Data select
-LED = 23  # LED may also be strapped direct to +3V, (and then LED=0 here). LED sinks 10-14 mA @ 3V
+DC = 24  # RS Labeled on board as "A0"   Command/Data select
+LED = 5  # LED may also be strapped direct to +3V, (and then LED=0 here). LED sinks 10-14 mA @ 3V
 
 spi = spidev.SpiDev()
 TFT = TFT144(GPIO, spi, CE, DC, RST, LED, TFT144.ORIENTATION180, isRedBoard=False)
