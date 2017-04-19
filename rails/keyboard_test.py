@@ -1,24 +1,4 @@
 
-def getchar():
-    # Returns a single character from standard input
-    import tty, termios, sys
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(sys.stdin.fileno())
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
-
-
-while 1:
-    ch = getchar()
-    print ('You pressed', ch)
-
-exit()
-################################################
-
 import sys
 import select
 import tty
@@ -37,7 +17,10 @@ class NonBlockingConsole(object):
 
     def get_data(self):
         if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
-            return sys.stdin.read(1)
+            c = sys.stdin.read(1)
+            if c == '\x1b':
+                c += sys.stdin.read(2)
+            return c
         return False
 
 
@@ -47,8 +30,19 @@ if __name__ == '__main__':
         i = 0
         while 1:
             d = nbc.get_data()
-            if d:
+            if not d:
+                continue
+
+            if d == '\x1b[A':
+                print("up")
+            elif d == '\x1b[B':
+                print("down")
+            elif d == '\x1b[C':
+                print("right")
+            elif d == '\x1b[D':
+                print("left")
+            else:
                 print(d)
-            if d == '\x1b':  # x1b is ESC
-                print(nbc)
+
+            if d == 'q':
                 break
