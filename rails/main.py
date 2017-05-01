@@ -1,48 +1,47 @@
-from threading import Event, Thread
-from my_input import KeyboardT
+from rail_lib import *
+from driver.devices import StepMotor
+from threading import Event
+import picamera
+from driver.libtft144.lib_tft144 import TFT144
+import RPi.GPIO as GPIO
+import spidev
 
-class KeyboardEvent(Event):
-    def __init__(self):
-        Event.__init__(self)
-        self.char = False
-        self.control = False
-
-# class StepMotorEvent(Event):
-#     def __init__(self):
-#         Event.__init__(self)
-#         self.direction = False
+motorH = StepMotor([26,19,13,6])
+motorV = StepMotor([12,16,20,21])
 
 
-class MotoT(Thread):
-    def __init__(self, wait_event):  # , event_for_wait, event_for_set
-        Thread.__init__(self)
-        self.wait_event = wait_event
-        self.name = 'Moto thread'
+kbEvent = KeyboardEvent()
+camEvent = Event()
+tftEvent = Event()
 
-    def run(self):
-        while 1:
-            self.wait_event.wait()
-            self.wait_event.clear()
-            if self.wait_event.control:
-                print('Motor begin move ' + self.wait_event.control)
-            else:
-                print('Motor stop')
-            # event_for_set.set() # set event for neighbor thread
+# camera config
+piCam = picamera.PiCamera()
+piCam.resolution = (128, 128)
+piCam.iso = 800
+# diaplay config
+# GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
+tft = TFT144(GPIO, spidev.SpiDev(), 0, 24, 25, 5, TFT144.ORIENTATION180, isRedBoard=False)
 
-kb_Event = KeyboardEvent()
+motoT = MotoThread(kbEvent, motorH, motorV)
+kbT = KeyboardThread(kbEvent)
+camT = CameraThread(camEvent, tftEvent, piCam)
+tftT = DisplayThread(camEvent, tftEvent, tft)
+core = Core(camEvent, tftEvent, tft)
 
-moto = MotoT(kb_Event)
-ma_input = KeyboardT(kb_Event)
+motoT.start()
+kbT.start()
+camT.start()
+tftT.start()
+core.start()
 
-moto.start()
-ma_input.start()
+camEvent.set()
 
-try:
-    moto.join()
-    ma_input.join()
-except KeyboardInterrupt:
-    del moto
-    del ma_input
-    print('stopped')
+motoT.join()
+kbT.join()
+core.join()
+
+del motoT
+del kbT
 
 print('main done')

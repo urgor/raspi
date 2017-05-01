@@ -1,6 +1,6 @@
 import time
 
-from devices import CollectorMotor
+from .devices import CollectorMotor
 
 
 class MotorCommandInterface():
@@ -204,7 +204,8 @@ class CameraCommand:
     PICTURE_RESOLUTION_MAX = (3280, 2464)
     PICTURE_RESOLUTION_TFT144 = (128, 128)
     VIDEO_RESOLUTION_720 = (1280, 720)
-    
+    VIDEO_RESOLUTION_1080 = (1920, 1080)
+
     def __init__(self, camera, filename):
         self.camera = camera
         self.i = 0
