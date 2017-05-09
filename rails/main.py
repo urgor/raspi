@@ -21,27 +21,32 @@ piCam.iso = 800
 # diaplay config
 # GPIO.setwarnings(False)
 # GPIO.setmode(GPIO.BCM)
-tft = TFT144(GPIO, spidev.SpiDev(), 0, 24, 25, 5, TFT144.ORIENTATION180, isRedBoard=False)
+tft = TFT144(GPIO, spidev.SpiDev(), 0, 24, 25, 5, TFT144.ORIENTATION0, isRedBoard=False)
 
-motoT = MotoThread(kbEvent, motorH, motorV)
-kbT = KeyboardThread(kbEvent)
-camT = CameraThread(camEvent, tftEvent, piCam)
-tftT = DisplayThread(camEvent, tftEvent, tft)
-core = Core(camEvent, tftEvent, tft)
+# motoT = MotoThread(kbEvent, motorH, motorV)
+core = Core()
+kbT = KeyboardThread(core)
+camT = CameraThread(core)
+tftT = DisplayThread(core)
+core.kb = kbT
+core.cam = camT
+core.tft = tft
+core.kbEvent = kbEvent
+core.camEvent = camEvent
+core.tftEvent = tftEvent
+core.run()
 
-motoT.start()
+# motoT.start()
 kbT.start()
 camT.start()
 tftT.start()
-core.start()
 
-camEvent.set()
+# camEvent.set()
 
-motoT.join()
+# motoT.join()
 kbT.join()
-core.join()
 
-del motoT
+# del motoT
 del kbT
 
 print('main done')

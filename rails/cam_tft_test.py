@@ -1,7 +1,7 @@
-import commands as cmd
+import driver.commands as cmd
 import RPi.GPIO as GPIO
 import picamera
-from libtft144.lib_tft144 import TFT144
+from driver.libtft144.lib_tft144 import TFT144
 
 # python3-pigpio/stable 1.60-1 all
 #   Python module which talks to the pigpio daemon (Python 3)
@@ -12,6 +12,7 @@ cam = picamera.PiCamera()
 # cam.vflip = True
 # cam.hflip = True
 # camCmd.doSnapshot()
+
 cam.resolution = (128,128)
 cam.iso = 800
 GPIO.setwarnings(False)
